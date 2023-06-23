@@ -1,24 +1,49 @@
 import { useState, useRef } from "react";
 
 const useTimer = (ini = 0) => {
-  const [time, setTime] = "Your code here";
+  const [time, setTime] = useState(0);
 
-  const isStart = "Your code here";
-  const active = "Your code here";
-  const refInterval = "Your code here";
+  const [splitList, setSplitList] = useState([]);
+  const isStart = useRef(true);
+  const active = useRef();
+  const refInterval = useRef(0);
 
   const startTimer = () => {
-    "Your code here";
+    isStart.current = true;
     active.current.disabled = true;
+    refInterval.current = setInterval(() => {
+      if (isStart.current) {
+        setTime((time) => time + 1);
+      }
+    }, 1000);
   };
+
   const stopTimer = () => {
-    "Your code here";
-  };
-  const resetTimer = () => {
-    "Your code here";
+    isStart.current = false;
+    clearInterval(refInterval.current);
     active.current.disabled = false;
   };
 
-  return { time, startTimer, stopTimer, resetTimer, active };
+  const resetTimer = () => {
+    setTime(0);
+    clearInterval(refInterval.current);
+    active.current.disabled = false;
+
+    setSplitList([]);
+  };
+
+  const splitTimer = () => {
+    setSplitList((split) => [...split, time]);
+  };
+
+  return {
+    time,
+    startTimer,
+    stopTimer,
+    resetTimer,
+    active,
+    splitTimer,
+    splitList,
+  };
 };
 export default useTimer;
